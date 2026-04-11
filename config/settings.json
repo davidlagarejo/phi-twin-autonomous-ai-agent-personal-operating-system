@@ -1,0 +1,29 @@
+{
+  "ollama": {
+    "base_url": "http://localhost:11434",
+    "model": "phi4:14b",
+    "temperature": 0.1,
+    "context_window": 8192
+  },
+  "web": {
+    "host": "127.0.0.1",
+    "port": 8080
+  },
+  "agent": {
+    "name": "Your Name",
+    "timezone": "America/New_York"
+  },
+  "data": {
+    "base_dir": "/path/to/phi-twin/data",
+    "dataset_dir": "/path/to/phi-twin/data/dataset",
+    "audit_log": "/path/to/phi-twin/data/audit_logs/audit.jsonl"
+  },
+  "search": {
+    "max_results_per_query": 6,
+    "max_queries_per_cycle": 6,
+    "polite_delay_seconds": 0.5
+  },
+  "searxng": {
+    "url": "http://127.0.0.1:8888"
+  }
+}

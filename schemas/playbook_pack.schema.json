@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "playbook_pack entry",
+  "description": "One synthetic playbook example for fine-tuning the Phi Twin agent",
+  "type": "object",
+  "required": ["id", "pack", "synthetic", "category", "scenario", "inputs", "playbook", "tags", "notes", "safety", "timestamp_utc"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^pb_[0-9]{6}$",
+      "description": "Unique identifier e.g. pb_000001"
+    },
+    "pack": {
+      "type": "string",
+      "const": "playbook_pack"
+    },
+    "synthetic": {
+      "type": "boolean",
+      "const": true,
+      "description": "Must always be true — these are synthetic examples, never golden-set"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["outreach", "followup", "event_prep", "scope_control", "escalation", "referral", "reengage", "post_event"]
+    },
+    "scenario": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 300
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["channel", "context"],
+      "properties": {
+        "channel": {
+          "type": "string",
+          "enum": ["email", "linkedin_dm", "text"]
+        },
+        "context": {
+          "type": "object",
+          "required": ["who", "company", "objective", "constraints"],
+          "properties": {
+            "who":        { "type": "string" },
+            "company":    { "type": "string" },
+            "objective":  { "type": "string" },
+            "constraints": { "type": "array", "items": { "type": "string" } },
+            "assets":      { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "playbook": {
+      "type": "object",
+      "required": ["steps", "cadence", "success_criteria", "failure_modes", "recovery"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": ["step", "goal", "message", "followup_if_no_reply"],
+            "properties": {
+              "step":                { "type": "integer", "minimum": 1 },
+              "goal":                { "type": "string", "minLength": 5 },
+              "message":             { "type": "string", "minLength": 30 },
+              "followup_if_no_reply":{ "type": "string" }
+            }
+          }
+        },
+        "cadence": {
+          "type": "object",
+          "required": ["touches", "spacing_days"],
+          "properties": {
+            "touches":      { "type": "integer", "minimum": 1 },
+            "spacing_days": { "type": "array", "items": { "type": "integer" } }
+          }
+        },
+        "success_criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "failure_modes":    { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "recovery":         { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": { "type": "string" }
+    },
+    "notes": { "type": "string" },
+    "safety": {
+      "type": "object",
+      "required": ["pii_present", "external_links_allowed"],
+      "properties": {
+        "pii_present":           { "type": "boolean", "const": false },
+        "external_links_allowed":{ "type": "boolean" }
+      }
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "description": "ISO 8601 generation timestamp"
+    }
+  }
+}

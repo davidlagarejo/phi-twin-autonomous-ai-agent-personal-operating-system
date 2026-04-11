@@ -1,0 +1,34 @@
+# phi-twin — service stack
+# ALL ports are bound to 127.0.0.1 (localhost only).
+# Remote access is handled exclusively by Tailscale Serve (see scripts/tailscale-serve.sh).
+# Do NOT change port bindings to 0.0.0.0.
+#
+# After first `docker compose up -d`, seed the SearXNG config:
+#   docker cp docker/searxng/settings.yml searxng:/etc/searxng/settings.yml
+#   docker restart searxng
+
+services:
+
+  # ── SearXNG ──────────────────────────────────────────────────────────────────
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    restart: unless-stopped
+    # CRITICAL: bind to 127.0.0.1 only
+    ports:
+      - "127.0.0.1:8888:8080"
+    volumes:
+      - searxng_config:/etc/searxng
+    environment:
+      - SEARXNG_BASE_URL=http://127.0.0.1:8888/
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+
+volumes:
+  searxng_config:
+    driver: local

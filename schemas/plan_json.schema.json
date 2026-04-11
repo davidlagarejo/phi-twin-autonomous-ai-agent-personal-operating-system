@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PLAN_JSON",
+  "description": "Output schema for the PrivateClaw Planning Core (/api/plan). Must be returned as bare JSON with no surrounding prose or markdown fences.",
+  "type": "object",
+  "required": ["status", "action", "goal", "why", "state_update", "next_step"],
+  "additionalProperties": true,
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["DONE", "IN_PROGRESS", "NEEDS_USER"],
+      "description": "Current cycle completion state."
+    },
+    "action": {
+      "type": "string",
+      "enum": ["RESPOND_DIRECT", "SEARCH_WEB", "ASK_CLAUDE", "FREEZE"],
+      "description": "Next action to execute. Selection order: RESPOND_DIRECT > SEARCH_WEB > ASK_CLAUDE."
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Short human-readable goal for this plan step."
+    },
+    "why": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Bullet-point justification for the chosen action."
+    },
+    "state_update": {
+      "type": "object",
+      "description": "Incremental update to the persisted agent state.",
+      "properties": {
+        "hypotheses_delta": {
+          "type": "array",
+          "description": "Hypotheses to add, update, or close (with confidence delta)."
+        },
+        "evidence_add": {
+          "type": "array",
+          "description": "New evidence items with credibility and freshness."
+        },
+        "open_loops_add": {
+          "type": "array",
+          "description": "New open research loops to track."
+        },
+        "queue_add": {
+          "type": "array",
+          "description": "New tasks to append to the execution queue."
+        }
+      }
+    },
+    "questions_to_user": {
+      "type": "array",
+      "maxItems": 1,
+      "description": "At most ONE blocking question. Empty array if not blocked.",
+      "items": {
+        "type": "object",
+        "required": ["blocking_question", "why_it_blocks", "what_changes_if_answered"],
+        "additionalProperties": false,
+        "properties": {
+          "blocking_question": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Single, high-information-gain question."
+          },
+          "why_it_blocks": {
+            "type": "string",
+            "description": "Why progress is blocked until this is answered."
+          },
+          "what_changes_if_answered": {
+            "type": "string",
+            "description": "What new actions become available once answered."
+          }
+        }
+      }
+    },
+    "web_queries": {
+      "type": "array",
+      "description": "Sanitized SearXNG queries. Must be empty unless action=SEARCH_WEB.",
+      "items": {
+        "type": "object",
+        "required": ["query", "why"],
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Fully sanitized query — zero PII, no emails, phones, or user file paths."
+          },
+          "why": {
+            "type": "string",
+            "description": "Short justification for this specific query."
+          }
+        }
+      }
+    },
+    "claude_spec": {
+      "type": "object",
+      "description": "Abstract technical spec for ASK_CLAUDE. Must be empty unless action=ASK_CLAUDE.",
+      "properties": {
+        "goal": {
+          "type": "string",
+          "enum": ["automation_spec", "workflow_spec", "debug_fix"],
+          "description": "Category of the Claude request."
+        },
+        "language": {
+          "type": "string",
+          "const": "en",
+          "description": "Always English. Non-negotiable."
+        },
+        "inputs_schema": {
+          "type": "object",
+          "description": "Abstract input field types (no real values)."
+        },
+        "outputs_schema": {
+          "type": "object",
+          "description": "Abstract output field types."
+        },
+        "constraints": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Local-only constraints: no PII, no secrets, no external URLs."
+        }
+      }
+    },
+    "next_step": {
+      "type": "string",
+      "description": "Short instruction forwarded to /api/execute."
+    }
+  }
+}

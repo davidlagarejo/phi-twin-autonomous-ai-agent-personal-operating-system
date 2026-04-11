@@ -1,0 +1,36 @@
+# SearXNG settings — phi-twin stack
+# Locked to localhost, JSON API, no public instance.
+# phi-twin calls: http://127.0.0.1:8888/search?q=...&format=json
+
+use_default_settings: true
+
+server:
+  base_url: http://127.0.0.1:8888/
+  # No image proxy needed for local API-only use
+  image_proxy: false
+  # This is a private instance — no public access
+  public_instance: false
+  # Secret key (SearXNG generates on first run if absent; we keep a stable value)
+  secret_key: "phi-twin-local-only-not-public"
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_format: json
+  # Explicitly enable json format — without this SearXNG returns 403 for ?format=json
+  formats:
+    - html
+    - json
+
+outgoing:
+  request_timeout: 10.0
+  max_request_timeout: 15.0
+  # Do not leak user agent
+  useragent_suffix: ""
+
+ui:
+  static_use_hash: true
+  query_in_title: false
+  default_locale: en
+  # Minimal UI — API use only
+  results_on_new_tab: false

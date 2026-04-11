@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "failure_pack entry",
+  "description": "Bad→correct pair for training anti-sycophancy, anti-hallucination, and traceability",
+  "type": "object",
+  "required": ["id","pack","synthetic","category","context","bad_prompt","bad_response","correct_response","correction_notes","labels","research_trace","evidence_gap","next_tool_plan","safety","timestamp_utc"],
+  "additionalProperties": false,
+  "properties": {
+    "id":        { "type": "string", "pattern": "^fail_[0-9]{6}$" },
+    "pack":      { "type": "string", "const": "failure_pack" },
+    "synthetic": { "type": "boolean", "const": true },
+    "category":  { "type": "string", "enum": ["sycophancy","hallucination","overconfidence","missing_data","scope_creep","privacy_leak","tool_misuse","unsafe_action","wrong_tone","bad_followup"] },
+    "context": {
+      "type": "object",
+      "required": ["channel","goal","user_style_rules"],
+      "properties": {
+        "channel": { "type": "string", "enum": ["email","dm","memo","meeting","system_prompt","agent_action"] },
+        "goal":    { "type": "string", "enum": ["book_meeting","decide","draft_message","research","follow_up","plan_event"] },
+        "user_style_rules": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "bad_prompt":       { "type": "string", "minLength": 5 },
+    "bad_response":     { "type": "string", "minLength": 5 },
+    "correct_response": { "type": "string", "minLength": 5 },
+    "correction_notes": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "labels": {
+      "type": "object",
+      "required": ["must_ask_question","must_refuse","must_use_tools","confidence"],
+      "properties": {
+        "must_ask_question": { "type": "boolean" },
+        "must_refuse":       { "type": "boolean" },
+        "must_use_tools":    { "type": "string", "enum": ["none","search","scrape","verify","search+verify","scrape+verify"] },
+        "confidence":        { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+    "research_trace": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title","url","why"],
+        "properties": {
+          "title": { "type": "string" },
+          "url":   { "type": "string" },
+          "why":   { "type": "string" }
+        }
+      }
+    },
+    "evidence_gap":   { "type": "array", "items": { "type": "string" } },
+    "next_tool_plan": { "type": "array", "items": { "type": "string" } },
+    "safety": {
+      "type": "object",
+      "required": ["pii_present","external_links_allowed"],
+      "properties": {
+        "pii_present":            { "type": "boolean", "const": false },
+        "external_links_allowed": { "type": "boolean" }
+      }
+    },
+    "timestamp_utc": { "type": "string" }
+  }
+}

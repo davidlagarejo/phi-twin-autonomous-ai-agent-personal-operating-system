@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "voice_pack entry (v2)",
+  "description": "Outbound message examples in David Lagarejo's voice — outreach, followup, scope_control, event_prep, referral, opportunity_triage",
+  "type": "object",
+  "required": ["id","channel","audience","scenario_type","input_context","output_message","meeting_slot_suggestion","tags","synthetic"],
+  "additionalProperties": false,
+  "properties": {
+    "id":                    { "type": "string", "pattern": "^vp_[0-9]{6}$" },
+    "channel":               { "type": "string", "enum": ["email","linkedin_dm","whatsapp","sms"] },
+    "audience":              { "type": "string", "minLength": 3 },
+    "scenario_type":         { "type": "string", "enum": ["outreach","followup","scope_control","event_prep","referral","opportunity_triage"] },
+    "input_context":         { "type": "string", "minLength": 5 },
+    "output_message":        { "type": "string", "minLength": 20 },
+    "meeting_slot_suggestion":{ "type": "string", "minLength": 3 },
+    "tags":                  { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "synthetic":             { "type": "boolean" }
+  }
+}

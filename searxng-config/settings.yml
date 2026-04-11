@@ -1,0 +1,44 @@
+use_default_settings: true
+
+general:
+  debug: false
+  instance_name: "phi-searxng"
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_lang: "en"
+  formats:
+    - html
+    - json
+
+server:
+  port: 8080
+  bind_address: "0.0.0.0"
+  secret_key: "phi-twin-local-secret-change-me"
+  limiter: false
+  image_proxy: false
+
+ui:
+  static_use_hash: true
+  default_locale: "en"
+
+enabled_plugins:
+  - Hash_plugin
+  - Search_on_category_select
+  - Tracker_url_remover
+
+engines:
+  - name: google
+    engine: google
+    shortcut: g
+    use_mobile_ui: false
+  - name: bing
+    engine: bing
+    shortcut: b
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: d
+  - name: google scholar
+    engine: google_scholar
+    shortcut: gs

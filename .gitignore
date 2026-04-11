@@ -1,0 +1,55 @@
+# ── Model weights / LoRA adapters (large binaries) ────────────────────────────
+mlx_ft/adapters/*.safetensors
+mlx_ft/adapters_best/*.safetensors
+mlx_ft/data/
+
+# ── Runtime outputs ───────────────────────────────────────────────────────────
+data/audit_logs/
+data/dossiers/
+logs/
+nohup.out
+*.log
+
+# ── Runtime state (personal / operational data) ───────────────────────────────
+data/contacts.json
+data/profile.json
+data/profile_qa.jsonl
+data/chats/
+data/knowledge_base.md
+data/directives.md
+data/activity.jsonl
+data/active_question.json
+data/pending_message.json
+data/dev_queue.json
+data/jobs/
+data/dossier_index.json
+data/timeline_cards.json
+data/tx_cache.json
+data/og_cache.json
+data/questions_cache.json
+data/likes.json
+data/outreach_tasks.json
+data/jobs_seen.json
+data/proactive_state.json
+data/job_tracker_state.json
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# ── Secrets / env ─────────────────────────────────────────────────────────────
+.env
+.env.*
+*.key
+*.pem
+secrets.json
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble

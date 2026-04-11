@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "note": "Define your personal communication style here. This file is excluded from version control in production use.",
+
+  "writing_rules": {
+    "1": "Value first: open with a relevant finding or insight before asking for anything.",
+    "2": "Be concise: short sentences, one paragraph when possible.",
+    "3": "Direct language: no filler words, no marketing phrases.",
+    "4": "Conversational tone: write as you would speak, but with clear intent.",
+    "5": "No time-boxing: propose a specific slot instead of asking for '15 minutes'."
+  },
+
+  "structure": {
+    "pattern": "Hi [Name]. [Hook]. [Insight]. [Offer with specific slot]. [Fallback CTA]. [Sign-off].",
+    "sentences": "4-5",
+    "word_count": {"min": 50, "max": 135},
+    "paragraphs": 1
+  },
+
+  "sign_off": "Best regards, [Your Name]"
+}
